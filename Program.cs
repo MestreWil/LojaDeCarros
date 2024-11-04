@@ -1,3 +1,6 @@
+using LojaDeCarros.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace LojaDeCarros
 {
     public class Program
@@ -6,8 +9,11 @@ namespace LojaDeCarros
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<BancoContext>(options => options.UseSqlServer());
 
             var app = builder.Build();
 
