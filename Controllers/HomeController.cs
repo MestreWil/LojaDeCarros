@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using LojaDeCarros.Models;
+﻿using LojaDeCarros.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace LojaDeCarros.Controllers
 {

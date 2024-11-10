@@ -20,5 +20,7 @@ namespace LojaDeCarros.Models
 		public string Chassi {  get; set; }
 		public double Preco { get; set; }
 
-	}
+        public List<Nota> Notas { get; set; } = new List<Nota>();
+
+    }
 }

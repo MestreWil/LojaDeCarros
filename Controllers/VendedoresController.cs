@@ -10,87 +10,87 @@ using LojaDeCarros.Models;
 
 namespace LojaDeCarros.Controllers
 {
-    public class CarrosController : Controller
+    public class VendedoresController : Controller
     {
-        private readonly LojaDeCarroContext _context;
+        private readonly LojaDeCarrosContext _context;
 
-        public CarrosController(LojaDeCarroContext context)
+        public VendedoresController(LojaDeCarrosContext context)
         {
             _context = context;
         }
 
-        // GET: Carros
+        // GET: Vendedores
         public async Task<IActionResult> Index()
         {
-            return _context.Carro != null ?
-                        View(await _context.Carro.ToListAsync()) :
-                        Problem("Entity set 'LojaDeCarrosContext.Carro'  is null.");
+            return _context.Vendedor != null ?
+                        View(await _context.Vendedor.ToListAsync()) :
+                        Problem("Entity set 'LojaDeCarrosContext.Vendedor'  is null.");
         }
 
-        // GET: Carros/Details/5
+        // GET: Vendedores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Carro == null)
+            if (id == null || _context.Vendedor == null)
             {
                 return NotFound();
             }
 
-            var carro = await _context.Carro
+            var vendedor = await _context.Vendedor
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (carro == null)
+            if (vendedor == null)
             {
                 return NotFound();
             }
 
-            return View(carro);
+            return View(vendedor);
         }
 
-        // GET: Carros/Create
+        // GET: Vendedores/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Carros/Create
+        // POST: Vendedores/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Marca,Modelo,AnoFabricacao,AnoModelo,Chassi,Preco")] Carro carro)
+        public async Task<IActionResult> Create([Bind("Id,Name,DataAdmissao,Matricula,Salario")] Vendedor vendedor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(carro);
+                _context.Add(vendedor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(carro);
+            return View(vendedor);
         }
 
-        // GET: Carros/Edit/5
+        // GET: Vendedores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Carro == null)
+            if (id == null || _context.Vendedor == null)
             {
                 return NotFound();
             }
 
-            var carro = await _context.Carro.FindAsync(id);
-            if (carro == null)
+            var vendedor = await _context.Vendedor.FindAsync(id);
+            if (vendedor == null)
             {
                 return NotFound();
             }
-            return View(carro);
+            return View(vendedor);
         }
 
-        // POST: Carros/Edit/5
+        // POST: Vendedores/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo,AnoFabricacao,AnoModelo,Chassi,Preco")] Carro carro)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,DataAdmissao,Matricula,Salario")] Vendedor vendedor)
         {
-            if (id != carro.Id)
+            if (id != vendedor.Id)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace LojaDeCarros.Controllers
             {
                 try
                 {
-                    _context.Update(carro);
+                    _context.Update(vendedor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CarroExists(carro.Id))
+                    if (!VendedorExists(vendedor.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,69 @@ namespace LojaDeCarros.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(carro);
+            return View(vendedor);
         }
 
-        // GET: Carros/Delete/5
+        // GET: Vendedores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Carro == null)
+            if (id == null || _context.Vendedor == null)
             {
                 return NotFound();
             }
 
-            var carro = await _context.Carro
+            var vendedor = await _context.Vendedor
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (carro == null)
+            if (vendedor == null)
             {
                 return NotFound();
             }
 
-            return View(carro);
+            return View(vendedor);
         }
 
-        // POST: Carros/Delete/5
+        // POST: Vendedores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Carro == null)
+            if (_context.Vendedor == null)
             {
-                return Problem("Entity set 'LojaDeCarrosContext.Carro'  is null.");
+                return Problem("Entity set 'LojaDeCarrosContext.Vendedor'  is null.");
             }
-            var carro = await _context.Carro.FindAsync(id);
-            if (carro != null)
+            var vendedor = await _context.Vendedor.FindAsync(id);
+            if (vendedor != null)
             {
-                _context.Carro.Remove(carro);
+                _context.Vendedor.Remove(vendedor);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CarroExists(int id)
+        private bool VendedorExists(int id)
         {
-            return (_context.Carro?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Vendedor?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public IActionResult Report()
+        {
+            var vendedores = _context.Vendedor.Include("Departemento").ToList();
+
+            ViewData["TotalFolhaPagamento"] = vendedores.Sum(s => s.Salario);
+
+            ViewData["Maior"] = vendedores.Max(s => s.Salario);
+
+            ViewData["Menor"] = vendedores.Min(s => s.Salario);
+
+            ViewData["Media"] = vendedores.Average(s => s.Salario);
+
+            ViewData["Ricos"] = vendedores.Count(s => s.Salario >= 300000);
+
+
+            return View();
+        }
+
+
     }
 }
